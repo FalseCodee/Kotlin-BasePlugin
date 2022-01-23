@@ -1,0 +1,6 @@
+name: BasePlugin
+version: '${project.version}'
+main: me.falsecode.baseplugin.Main
+api-version: 1.18
+authors: [ FalseCode ]
+description: FalseCode's base plugin for minecraft development.
