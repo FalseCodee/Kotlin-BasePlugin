@@ -42,11 +42,7 @@ abstract class Gui(plugin: JavaPlugin, player:Player, size:Int, title:String) : 
     }
 
     protected fun openInventory() {
-//         object: BukkitRunnable() {
-//             override fun run() {
-                player.openInventory(inventory)
-//             }
-//         }.runTaskLater(plugin, 20L)
+        player.openInventory(inventory)
     }
 
     override fun update() {
