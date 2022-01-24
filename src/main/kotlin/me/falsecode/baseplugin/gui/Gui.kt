@@ -1,20 +1,20 @@
 package me.falsecode.baseplugin.gui
 
+import me.falsecode.baseplugin.Main
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
-import org.bukkit.plugin.java.JavaPlugin
-import org.bukkit.scheduler.BukkitRunnable
+import java.util.*
 
-abstract class Gui(plugin: JavaPlugin, player:Player, size:Int, title:String) : IGui {
+abstract class Gui(plugin: Main, player:Player, size:Int, title:String) : IGui {
     val player:Player
     protected val inventory:Inventory
     protected val items:Array<ItemStack>
-    val buttons:HashMap<Int, IButton>
-    protected val plugin:JavaPlugin
+    val buttons: HashMap<Int, IButton>
+    protected val plugin:Main
     init {
         GuiManager.guiHashMap.remove(player.uniqueId)
         this.player = player
@@ -37,6 +37,10 @@ abstract class Gui(plugin: JavaPlugin, player:Player, size:Int, title:String) : 
         items[slot] = itemStack
     }
 
+    fun clear() {
+        Arrays.fill(items, ItemStack(Material.AIR, 1))
+    }
+
     override fun switchScreen(gui: Gui) {
         GuiManager.addGui(gui)
     }
@@ -46,10 +50,11 @@ abstract class Gui(plugin: JavaPlugin, player:Player, size:Int, title:String) : 
     }
 
     override fun update() {
-       inventory.contents = items
+        inventory.contents = items
     }
 
     override fun onInventoryClose(event: InventoryCloseEvent, gui: Gui) {
-       Bukkit.getScheduler().runTaskLater(plugin, player::updateInventory, 1L)
+        Bukkit.getScheduler().runTaskLater(plugin, player::updateInventory, 1L)
+        GuiManager.guiHashMap.remove(player.uniqueId)
     }
 }

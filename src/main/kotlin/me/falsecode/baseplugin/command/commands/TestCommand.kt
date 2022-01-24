@@ -1,15 +1,15 @@
 package me.falsecode.baseplugin.command.commands
 
+import me.falsecode.baseplugin.Main
 import me.falsecode.baseplugin.command.CommandUsageException
 import me.falsecode.baseplugin.command.FalseCommand
 import me.falsecode.baseplugin.command.IFalseSubCommand
 import me.falsecode.baseplugin.gui.guis.GuiTestScreen
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import org.bukkit.plugin.java.JavaPlugin
 import java.util.*
 
-class TestCommand(plugin: JavaPlugin) : FalseCommand(plugin, "test", "Test Command", "Usage", Collections.singletonList("t")) {
+class TestCommand(plugin: Main) : FalseCommand(plugin, "test", "Test Command", "Usage", Collections.singletonList("t")) {
 
     init {
         addSubCommand(object: IFalseSubCommand {

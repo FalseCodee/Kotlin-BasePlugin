@@ -6,6 +6,7 @@ import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.inventory.InventoryOpenEvent
+import org.bukkit.event.player.PlayerQuitEvent
 
 class GuiListener : Listener {
 
@@ -26,5 +27,10 @@ class GuiListener : Listener {
     fun onInventoryOpen(event:InventoryOpenEvent) {
         val gui = GuiManager.getGui(event.player as Player)
         gui?.onInventoryOpen(event, gui)
+    }
+
+    @EventHandler
+    fun onLeave(event: PlayerQuitEvent) {
+        GuiManager.guiHashMap.remove(event.player.uniqueId)
     }
 }

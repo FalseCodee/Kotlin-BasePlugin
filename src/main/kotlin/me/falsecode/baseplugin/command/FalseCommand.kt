@@ -1,16 +1,13 @@
 package me.falsecode.baseplugin.command
 
+import me.falsecode.baseplugin.Main
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandMap
 import org.bukkit.command.CommandSender
-import org.bukkit.plugin.java.JavaPlugin
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 abstract class FalseCommand(
-    protected val plugin: JavaPlugin,
+    protected val plugin: Main,
     name: String,
     description: String,
     usageMessage: String,
