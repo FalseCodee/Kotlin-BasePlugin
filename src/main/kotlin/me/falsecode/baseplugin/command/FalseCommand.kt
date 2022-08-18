@@ -5,6 +5,9 @@ import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandMap
 import org.bukkit.command.CommandSender
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 abstract class FalseCommand(
     protected val plugin: Main,
@@ -15,8 +18,9 @@ abstract class FalseCommand(
     permission: String? = null,
     permissionMessage: String? = null
 ) : Command(name, description, usageMessage, aliases), IFalseCommand {
-    protected val subCommands:HashMap<String, IFalseSubCommand> = HashMap()
-    protected val tabComplete:HashMap<Int, MutableList<String>> = HashMap()
+    protected val subCommands: HashMap<String, IFalseSubCommand> = HashMap()
+    protected val tabComplete: HashMap<Int, MutableList<String>> = HashMap()
+    protected val modules: EnumMap<Entrance, MutableList<IFalseCommandModule>> = EnumMap(Entrance::class.java)
 
     init {
         lazy {
@@ -27,6 +31,7 @@ abstract class FalseCommand(
     }
 
     override fun execute(sender: CommandSender, command: String, args: Array<out String>): Boolean {
+        modules[Entrance.PRE]?.forEach {if(it.execute(sender, command, args)) return false}
         if(!sender.hasPermission(permission.orEmpty())) {
             sender.sendMessage(permissionMessage.orEmpty())
             return true
@@ -49,6 +54,7 @@ abstract class FalseCommand(
         } catch (exc : CommandUsageException) {
             sender.sendMessage(exc.message)
         }
+        modules[Entrance.POST]?.forEach {if(it.execute(sender, command, args)) return false}
         return false
     }
 
@@ -90,6 +96,12 @@ abstract class FalseCommand(
         val newTabs = tabComplete.getOrDefault(integer, ArrayList())
         newTabs.add("$prevCompletion-->$completion")
         tabComplete[integer] = newTabs
+    }
+
+    fun addModule(entrance: Entrance, module: IFalseCommandModule) {
+        val entranceModules = modules.getOrDefault(entrance, ArrayList())
+        entranceModules.add(module)
+        modules[entrance] = entranceModules
     }
 
 
